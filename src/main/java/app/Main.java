@@ -13,6 +13,8 @@ import app.p2.Consumidor2;
 import app.p2.Consumidor2JX;
 import app.p2.Productor2;
 import app.p2.Productor2JX;
+import app.p3.ConectorHTTP;
+import app.p3.Montador;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import org.slf4j.Logger;
@@ -59,6 +61,10 @@ public class Main {
                 opcionMenuP5();
                 clearScreen();
                 break;
+            case 6:
+                //Practica 3 - HTTP a webservice del ayuntamiento
+                opcionMenuP6();
+                clearScreen();
             case 0:
                 System.exit(0);
                 break;
@@ -99,6 +105,7 @@ public class Main {
             System.out.println("3.- Practica 2 con JSON y XML.");
             System.out.println("4.- Publicador con MQTT");
             System.out.println("5.- Consumidor con MQTT");
+            System.out.println("6.- Conector con Ayuntamiento");
             System.out.println("0.- Salir");
             try{
             opcion = teclado.nextInt();
@@ -290,6 +297,16 @@ public class Main {
         System.out.println("Dime el topic:");
         String topic = teclado.nextLine();
         ConsumidorMQTT consumidor = new ConsumidorMQTT("tcp://"+ip+":"+puerto,topic);
+    }
+    
+    public static void opcionMenuP6(){
+        ConectorHTTP con = new ConectorHTTP();
+        Montador mont = new Montador(con.connectar());
+        mont.connect();
+        try{
+        mont.publish();
+        }catch(Exception e){}
+        
     }
     
     public static String getNomcola(){
