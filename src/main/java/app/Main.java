@@ -5,6 +5,8 @@
  */
 package app;
 
+import ConMQTT.ConsumidorMQTT;
+import ConMQTT.ProductorMQTT;
 import app.p1.Consumidor;
 import app.p1.Productor;
 import app.p2.Consumidor2;
@@ -47,6 +49,16 @@ public class Main {
             case 3:
                 opcionMenuP3();
                 clearScreen();
+                break;
+            case 4:
+                //Prueba con MQTT
+                opcionMenuP4();
+                clearScreen();
+                break;
+            case 5:
+                opcionMenuP5();
+                clearScreen();
+                break;
             case 0:
                 System.exit(0);
                 break;
@@ -85,6 +97,8 @@ public class Main {
             System.out.println("1.- Practica 1.");
             System.out.println("2.- Practica 2.");
             System.out.println("3.- Practica 2 con JSON y XML.");
+            System.out.println("4.- Publicador con MQTT");
+            System.out.println("5.- Consumidor con MQTT");
             System.out.println("0.- Salir");
             try{
             opcion = teclado.nextInt();
@@ -242,6 +256,40 @@ public class Main {
                 break;
         }
         
+    }
+    public static void opcionMenuP4(){
+        teclado.nextLine();
+        System.out.println("Estas creando un productor en MQTT (Por defecto el puerto esta en 1883)");
+        System.out.println("Dime la direccion IP:");
+        String ip = teclado.nextLine();
+        System.out.println("Dime el puerto:");
+        String puerto = teclado.nextLine();
+        System.out.println("Dime el Topic");
+        String topic = teclado.nextLine();
+        
+        ProductorMQTT productor = new ProductorMQTT(ip,puerto,topic);
+        boolean cerrar = false;
+        while(!cerrar){
+            System.out.println("Texto a enviar:");
+            String mensaje = teclado.nextLine();
+            if(mensaje.equals("cerrar")){
+                productor.close();
+                cerrar = true;
+            }else{
+                productor.sendMessage(mensaje);
+            }
+        }
+    }
+    
+    public static void opcionMenuP5(){
+        teclado.nextLine();
+        System.out.println("Dime la direccion IP:");
+        String ip = teclado.nextLine();
+        System.out.println("Dime el puerto:");
+        String puerto = teclado.nextLine();
+        System.out.println("Dime el topic:");
+        String topic = teclado.nextLine();
+        ConsumidorMQTT consumidor = new ConsumidorMQTT("tcp://"+ip+":"+puerto,topic);
     }
     
     public static String getNomcola(){
